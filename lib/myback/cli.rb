@@ -26,31 +26,33 @@ module MyBack
 
     desc 'restore BACKUP_NAME [--no-backup]', 'restore from the backup'
     option :backup, type: :boolean, default: true
+    option :time_suffix, type: :boolean, default: false
     def restore(backup)
-      do_backup('_backup_before_restore', time_default: false) if options[:backup]
-      do_cmd("gzip -dc #{@backup_dir}/#{backup} | mysql #{@mysql_args}")
+      do_backup('_backup_before_restore') if options[:backup]
+      do_cmd("gzip -dc '#{@backup_dir}/#{backup}' | mysql #{@mysql_args}")
       todo_setup_test_db
     end
 
     desc 'ls', 'show backup list'
     def ls
-      do_cmd("ls -l #{@backup_dir}")
+      do_cmd("ls -l '#{@backup_dir}'")
     end
 
     desc 'rm BACKUP_NAME [BACKUP_NAME ...]', 'delete backups'
     def rm(*backups)
       backups.each do |backup|
-        do_cmd("rm #{@backup_dir}/#{backup}")
+        do_cmd("rm '#{@backup_dir}/#{backup}'")
       end
     end
 
     desc 'open_dir', 'open the backup directory in Finder (for macOS)'
     def open_dir
-      do_cmd("open #{@backup_dir}")
+      do_cmd("open '#{@backup_dir}'")
     end
 
     desc 'migrate [--seed] [--no-backup]', 'run db:migrate (for rails)'
     option :backup, type: :boolean, default: true
+    option :time_suffix, type: :boolean, default: true
     option :seed, type: :boolean, default: false
     def migrate
       do_backup('_backup_before_migrate') if options[:backup]
@@ -85,8 +87,8 @@ module MyBack
 
     def do_backup(backup)
       backup += time_suffix if options[:time_suffix]
-      do_cmd("mysqldump #{@mysql_args} -x --databases --add-drop-database #{@db}" \
-             " | gzip -c > #{@backup_dir}/#{backup}")
+      do_cmd("mysqldump #{@mysql_args} -x --databases --add-drop-database '#{@db}'" \
+             " | gzip -c > '#{@backup_dir}/#{backup}'")
     end
 
     def time_suffix
@@ -94,7 +96,7 @@ module MyBack
     end
 
     def todo_setup_test_db
-      puts("[TODO] run it to setup a test DB:\n#{$PROGRAM_NAME} setup_test_db")
+      puts("[TODO] run 'myback setup_test_db' to setup a test DB.")
     end
   end
 end
