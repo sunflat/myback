@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
 
 require "myback"
+MyBack::CLI.start
