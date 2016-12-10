@@ -11,8 +11,9 @@ module MyBack
       super
       @db = ENV['MYBACK_DB_NAME']
       @backup_dir = ENV['MYBACK_BACKUP_DIR']
+      @mysql_args = ENV['MYBACK_MYSQL_ARGS'] || '-u root'
       unless @db && @backup_dir
-        puts "ENV['MYBACK_DB_NAME'] ENV['MYBACK_BACKUP_DIR'] required"
+        puts 'MYBACK_DB_NAME and MYBACK_BACKUP_DIR are required in .env file'
         exit 1
       end
     end
@@ -27,7 +28,7 @@ module MyBack
     option :backup, type: :boolean, default: true
     def restore(backup)
       do_backup('_backup_before_restore', time_default: false) if options[:backup]
-      do_cmd("gzip -dc #{@backup_dir}/#{backup} | mysql #{mysql_args}")
+      do_cmd("gzip -dc #{@backup_dir}/#{backup} | mysql #{@mysql_args}")
       todo_setup_test_db
     end
 
@@ -84,7 +85,7 @@ module MyBack
 
     def do_backup(backup)
       backup += time_suffix if options[:time_suffix]
-      do_cmd("mysqldump #{mysql_args} -x --databases --add-drop-database #{@db}" \
+      do_cmd("mysqldump #{@mysql_args} -x --databases --add-drop-database #{@db}" \
              " | gzip -c > #{@backup_dir}/#{backup}")
     end
 
@@ -94,10 +95,6 @@ module MyBack
 
     def todo_setup_test_db
       puts("[TODO] run it to setup a test DB:\n#{$PROGRAM_NAME} setup_test_db")
-    end
-
-    def mysql_args
-      '-u root'
     end
   end
 end
