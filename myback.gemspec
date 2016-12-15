@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "myback"
   spec.version       = Myback::VERSION
   spec.authors       = ["sunflat"]
-  spec.email         = ["git.sunflat@sunflat.net"]
+  spec.email         = ["git.sunflat+myback@sunflat.net"]
 
   spec.summary       = %q{Backup management tool for MySQL}
   spec.homepage      = "https://github.com/sunflat/myback"
