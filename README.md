@@ -18,7 +18,7 @@ Make a `.env` file in the current directory with the following content:
 
 ```
 MYBACK_DB_NAME=<database name>
-MYBACK_BACKUP_DIR=<destination directory to make a backup files>
+MYBACK_BACKUP_DIR=<destination directory to make backup files>
 ```
 
 Make a backup of the database.
