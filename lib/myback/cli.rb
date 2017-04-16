@@ -56,26 +56,27 @@ module MyBack
     option :seed, type: :boolean, default: false
     def migrate
       do_backup('_backup_before_migrate') if options[:backup]
-      do_cmd('bundle exec rake db:migrate')
-      do_cmd('bundle exec rake db:seed') if options[:seed]
+      do_cmd('bin/rails db:migrate')
+      do_cmd('bin/rails db:seed') if options[:seed]
       todo_setup_test_db
     end
 
     desc 'migrate_status', 'run db:migrate:status (for rails)'
     def migrate_status
-      do_cmd('bundle exec rake db:migrate:status')
+      do_cmd('bin/rails db:migrate:status')
     end
 
     desc 'rollback [--step <STEP>]', 'run db:rollback (for rails)'
     option :step
     def rollback
-      do_cmd('bundle exec rake db:rollback' + (options[:step] ? " STEP=#{options[:step]}" : ''))
+      do_cmd('bin/rails db:rollback' + (options[:step] ? " STEP=#{options[:step]}" : ''))
       todo_setup_test_db
     end
 
     desc 'setup_test_db', 'setup a test DB (for rails)'
     def setup_test_db
-      do_cmd('RAILS_ENV=test bundle exec rake db:setup')
+      do_cmd('bin/rails db:environment:set RAILS_ENV=test')
+      do_cmd('bin/rails db:setup RAILS_ENV=test')
     end
 
     private
