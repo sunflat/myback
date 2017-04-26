@@ -3,7 +3,7 @@
 require 'thor'
 require 'dotenv'
 
-Dotenv.load
+Dotenv.load('.env.development.local', '.env.local', '.env.development', '.env')
 
 module MyBack
   class CLI < Thor
