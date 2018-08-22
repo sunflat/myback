@@ -35,7 +35,7 @@ module MyBack
 
     desc 'ls', 'show backup list'
     def ls
-      do_cmd("ls -l '#{@backup_dir}'")
+      do_cmd("ls -ltr '#{@backup_dir}'")
     end
 
     desc 'rm BACKUP_NAME [BACKUP_NAME ...]', 'delete backups'
